@@ -49,6 +49,9 @@
  * NÂO NOT  !
  */
 
+//Import da biblioteca que cálcula a média
+var mediaEscolar = require('./modulo/media.js')
+
 //Import da biblioteca readline
 var readline = require('readline')
 
@@ -79,8 +82,10 @@ entradaDeDados.question('Digite o nome do aluno:', function(nome){
                 entradaDeDados.question('Digite a nota4:', function(valor4){
                     let nota4 = valor4
 
+                    //Validação de tratamento de entrada vázio
                     if(nota1 == '' || nota2 == '' || nota3 == '' || nota4 == '' || nomeAluno == ''){
                         console.log('ERRO: Existem campos que não foram preenchidos.')
+
                     }else if(isNaN(nota1) || isNaN(nota2) || isNaN(nota3) || isNaN(nota4)){
                         console.log('ERRO: Não é possivel calcular com a entrada de letras')
 
@@ -88,18 +93,17 @@ entradaDeDados.question('Digite o nome do aluno:', function(nome){
                         console.log('ERRO: Os valores informados precisam ser entre 0 até 10')
 
                     }else{
-                        let media = (Number(nota1) + Number(nota2) + Number(nota3) + Number(nota4))/4
-                        let statusAluno
+                        //Chama a função para gerar a média
+                        let media = mediaEscolar.calcularMedia(nota1,nota2,nota3,nota4)
+                        //Chama a função para validar o status do aluno
+                        let statusAluno = mediaEscolar.validarStatus(media)
 
-                        if(media < 5){
-                            statusAluno = 'REPROVADO'
-                        }else if(media < 7 && media >= 5){
-                            statusAluno = 'EXAME'
-                        }else if(media >= 7 && media <= 10){
-                            statusAluno = 'APROVADO'
+                        if(statusAluno){
+
+                            console.log(`O aluno(a) ${nomeAluno} teve a média: ${media} e está: ${statusAluno}`)
+                            entradaDeDados.close
                         }
 
-                        console.log(`O alun(a) ${nomeAluno} teve a média: ${media.toFixed(1)} e está: ${statusAluno}`)
                     }
 
                 })//Fechamento da nota4
